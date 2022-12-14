@@ -7,11 +7,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class EmployeeDAOimp implements EmployeeDAO{
+public class EmployeeDAOimp implements DAO<Employee,Integer> {
 
     @Autowired
   JdbcTemplate jdbcTemplate;
@@ -21,12 +20,12 @@ public class EmployeeDAOimp implements EmployeeDAO{
     }
 
     @Override
-    public int update(Employee employee, int id) {
+    public int update(Employee employee, Integer id) {
         return jdbcTemplate.update("UPDATE Emp_data SET name=?,email=?,department=? WHERE id=?", new Object[] {employee.getName(),employee.getEmail(),employee.getDepartment(),id});
     }
 
     @Override
-    public int delete(int id) {
+    public int delete(Integer id) {
         return jdbcTemplate.update("DELETE FROM Emp_data WHERE id=?",id);
     }
 
@@ -37,7 +36,7 @@ public class EmployeeDAOimp implements EmployeeDAO{
     }
 
     @Override
-    public Employee getById(int id) {
+    public Employee getById(Integer id) {
         return jdbcTemplate.queryForObject("SELECT * FROM emp_data  WHERE id=?;",new BeanPropertyRowMapper<Employee>(Employee.class),id);
     }
 }

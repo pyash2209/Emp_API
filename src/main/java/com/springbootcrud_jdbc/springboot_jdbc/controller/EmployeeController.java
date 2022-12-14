@@ -1,6 +1,6 @@
 package com.springbootcrud_jdbc.springboot_jdbc.controller;
 
-import com.springbootcrud_jdbc.springboot_jdbc.Dao.EmployeeDAO;
+import com.springbootcrud_jdbc.springboot_jdbc.Dao.DAO;
 import com.springbootcrud_jdbc.springboot_jdbc.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +11,13 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeDAO eDAO;
+    private DAO<Employee,Integer> eDAO;
 
     @GetMapping("/employees")
     public List<Employee> getEmployees() {
         return eDAO.getAll();
     }
+
         @GetMapping("/employees/{id}")
           public Employee getEmployeeById(@PathVariable int id)   {
             return eDAO.getById(id);
