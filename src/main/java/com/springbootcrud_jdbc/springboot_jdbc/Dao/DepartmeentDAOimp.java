@@ -1,8 +1,11 @@
 package com.springbootcrud_jdbc.springboot_jdbc.Dao;
 
+import com.springbootcrud_jdbc.springboot_jdbc.Exception.EntityAlreadyExistException;
+import com.springbootcrud_jdbc.springboot_jdbc.Exception.GetByIdAccessException;
 import com.springbootcrud_jdbc.springboot_jdbc.model.Department;
 import com.springbootcrud_jdbc.springboot_jdbc.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,8 +19,14 @@ public class DepartmeentDAOimp implements DAO<Department,Integer> {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public int save(Department department) {
-        return jdbcTemplate.update("INSERT INTO dep_data(id,d_id,d_name,years,position) VALUES(?,?,?,?,?)", new Object[] {department.getId(),department.getD_id(),department.getD_name(),department.getYears(),department.getPosition()});
+    public int save(Department department)throws EntityAlreadyExistException {
+
+        try {
+            return jdbcTemplate.update("INSERT INTO dep_data(id,d_id,d_name,years,position) VALUES(?,?,?,?,?)", new Object[]{department.getId(), department.getD_id(), department.getD_name(), department.getYears(), department.getPosition()});
+        } catch (DataAccessException e) {
+
+            throw new GetByIdAccessException("Employee with this  id  is already  registered");
+        }
     }
 
     @Override
@@ -37,8 +46,14 @@ public class DepartmeentDAOimp implements DAO<Department,Integer> {
     }
 
     @Override
-    public Department getById(Integer id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM dep_data  WHERE id=?;",new BeanPropertyRowMapper<Department>(Department.class),id);
+    public Department getById(Integer id) throws GetByIdAccessException {
+
+       try{
+           return jdbcTemplate.queryForObject("SELECT * FROM dep_data  WHERE id=?;",new BeanPropertyRowMapper<Department>(Department.class),id);}
+
+    catch (DataAccessException e){
+
+           throw new GetByIdAccessException("Employee with id="+id+"is not registered");}
     }
 
 

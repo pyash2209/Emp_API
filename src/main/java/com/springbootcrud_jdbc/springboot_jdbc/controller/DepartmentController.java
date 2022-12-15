@@ -2,6 +2,7 @@ package com.springbootcrud_jdbc.springboot_jdbc.controller;
 
 
 import com.springbootcrud_jdbc.springboot_jdbc.Dao.DAO;
+import com.springbootcrud_jdbc.springboot_jdbc.Service.DepartmentService;
 import com.springbootcrud_jdbc.springboot_jdbc.model.Department;
 import com.springbootcrud_jdbc.springboot_jdbc.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,33 +14,33 @@ import java.util.List;
 public class DepartmentController {
 
     @Autowired
-private DAO<Department,Integer> dDAO;
+private DepartmentService departmentService;
 
     @GetMapping("/department")
     public List<Department> getDepartment() {
-        return dDAO.getAll();
+        return departmentService.getDepartment();
     }
 
     @GetMapping("/department/{id}")
     public Department getDepartmentById(@PathVariable int id)   {
-        return dDAO.getById(id);
+        return departmentService.getDepartmentById(id);
     }
 
 
     @PostMapping("/department")
     public  String saveDepartment(@RequestBody Department department){
-        return dDAO.save(department)+" No.of rows saved to the database of department";
+        return departmentService.saveDepartment(department)+" No.of rows saved to the database of department";
 
     }
 
     @PutMapping ("/department/{id}")
     public String updateDepartment(@RequestBody Department department,@PathVariable int id){
-        return dDAO.update(department,id)+" NO.of row update to database of department";
+        return departmentService.updateDepartment(department,id)+" NO.of row update to database of department";
     }
 
     @DeleteMapping("/department/{id}")
     public String deleteDepartmentById(@PathVariable int id){
-        return dDAO.delete(id)+" NO.of row deleted from database department";
+        return departmentService.deleteDepartmentById(id)+" NO.of row deleted from database department";
     }
 
 
